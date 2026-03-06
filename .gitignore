@@ -1,0 +1,17 @@
+# ── Secrets — NEVER commit these ─────────────────────────────────────────────
+config.json
+credentials_*.json
+token_*.pkl
+
+# ── Runtime files ─────────────────────────────────────────────────────────────
+seen_emails.json
+*.log
+monitor_stdout.log
+monitor_stderr.log
+__pycache__/
+*.pyc
+.DS_Store
+
+# ── Python env ────────────────────────────────────────────────────────────────
+venv/
+.env

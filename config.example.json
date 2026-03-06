@@ -1,0 +1,37 @@
+{
+  "_comment": "Copy this file to config.json and fill in your values. config.json is gitignored and will never be committed.",
+
+  "score_threshold": 7,
+  "poll_interval_seconds": 300,
+  "max_emails_per_check": 20,
+
+  "lm_studio": {
+    "url": "http://localhost:1234",
+    "model": "qwen2.5-3b-instruct",
+    "_model_note": "Check LM Studio > Local Server tab for the exact model name string. Recommended: qwen2.5-3b-instruct (best for classification, ~2GB RAM). Alternatives: qwen3-4b-instruct, phi-3.5-mini, llama-3.2-3b-instruct, smollm3-3b"
+  },
+
+  "telegram": {
+    "bot_token": "YOUR_BOT_TOKEN_HERE",
+    "chat_id": "YOUR_CHAT_ID_HERE",
+    "_help": "Bot token from @BotFather. Chat ID from @userinfobot."
+  },
+
+  "accounts": [
+    {
+      "label": "Main",
+      "credentials_path": "credentials.json",
+      "token_path": "token_main.pkl"
+    },
+    {
+      "label": "Stackit",
+      "credentials_path": "credentials.json",
+      "token_path": "token_stackit.pkl"
+    },
+    {
+      "label": "Media",
+      "credentials_path": "credentials.json",
+      "token_path": "token_media.pkl"
+    }
+  ]
+}
