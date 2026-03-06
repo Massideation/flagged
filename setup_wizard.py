@@ -490,7 +490,7 @@ def print_summary(base_dir: Path, accounts: list, model: str, threshold: int):
     print(f"  {bold('To tune what gets flagged:')}")
     print(f"    {cyan('nano PRIORITIES.md')}          — edit your priority context")
     print()
-    print(f"  {dim('Built by Mass Ideation · massideation.com · github.com/Massideation/flagged')}")
+    print(f"  {dim('Built by Miguel Sanchez · github.com/Massideation/flagged')}")
     print()
 
 # ── Main ──────────────────────────────────────────────────────────────────────

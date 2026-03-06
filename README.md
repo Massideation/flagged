@@ -205,10 +205,11 @@ Ideas for contributions:
 
 ## Built By
 
-Flagged was built by **[Mass Ideation](https://massideation.com)** — an AI agent factory building at the intersection of AI, crypto, and media.
+Flagged was built by **Miguel Sanchez** — building at the intersection of AI, crypto, and media.
 
-- 🐦 Follow the build in public: [@msanchezworld](https://twitter.com/msanchezworld)
-- 📺 Live coding & AI experiments on YouTube
+- 🐦 Twitter: [@msanchezworld](https://twitter.com/msanchezworld)
+- 💻 GitHub: [MSanchezWorld](https://github.com/MSanchezWorld)
+- 📺 YouTube: [MiguelSanchezWorld](https://youtube.com/@MiguelSanchezWorld)
 
 ---
 
