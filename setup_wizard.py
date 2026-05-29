@@ -346,7 +346,8 @@ def setup_model():
 # ── Score Threshold ───────────────────────────────────────────────────────────
 def setup_threshold():
     section("Alert Sensitivity")
-    info("Flagged scores each email 1–10. You only get alerted above your threshold.")
+    info("Flagged routes each email into Opportunity Radar, digest, or mute.")
+    info("The threshold below is the default immediate-alert sensitivity.")
     print()
     info("  10 = Drop everything")
     info("   7 = Respond today (recommended default)")
@@ -368,13 +369,46 @@ def write_config(base_dir: Path, bot_token: str, chat_id: str,
         "score_threshold": threshold,
         "poll_interval_seconds": 300,
         "max_emails_per_check": 20,
+        "alert_channels": {
+            "opportunities": {
+                "label": "Opportunity Radar",
+                "mode": "immediate",
+                "min_score": threshold,
+                "description": "Actual people, customers, friends, partners, paid work, and direct asks worth deciding on."
+            },
+            "money_admin": {
+                "label": "Money/Admin",
+                "mode": "digest",
+                "min_score": 9,
+                "description": "Bills, receipts, refunds, affiliate payouts, bank notices, and account admin."
+            },
+            "learning_events": {
+                "label": "Learning/Events",
+                "mode": "digest",
+                "min_score": 8,
+                "description": "Newsletters, webinars, launches, and event blasts."
+            },
+            "sales_pitches": {
+                "label": "Sales Pitches",
+                "mode": "mute",
+                "min_score": 10,
+                "description": "Cold outreach and people selling you something."
+            },
+            "muted": {
+                "label": "Muted",
+                "mode": "mute",
+                "min_score": 10,
+                "description": "Low-value noise."
+            }
+        },
         "lm_studio": {
             "url": "http://localhost:1234",
             "model": model
         },
         "telegram": {
             "bot_token": bot_token,
-            "chat_id": chat_id
+            "chat_id": chat_id,
+            "feedback_buttons": True
         },
         "accounts": accounts
     }

@@ -5,6 +5,39 @@
   "poll_interval_seconds": 300,
   "max_emails_per_check": 20,
 
+  "alert_channels": {
+    "opportunities": {
+      "label": "Opportunity Radar",
+      "mode": "immediate",
+      "min_score": 7,
+      "description": "Actual people, customers, friends, partners, prospects, paid work, and direct asks worth deciding on."
+    },
+    "money_admin": {
+      "label": "Money/Admin",
+      "mode": "digest",
+      "min_score": 9,
+      "description": "Bills, receipts, refunds, affiliate payouts, bank notices, and account admin. Usually not immediate."
+    },
+    "learning_events": {
+      "label": "Learning/Events",
+      "mode": "digest",
+      "min_score": 8,
+      "description": "Newsletters, webinars, launches, and event blasts. Useful later, not urgent."
+    },
+    "sales_pitches": {
+      "label": "Sales Pitches",
+      "mode": "mute",
+      "min_score": 10,
+      "description": "Cold outreach and people selling you something."
+    },
+    "muted": {
+      "label": "Muted",
+      "mode": "mute",
+      "min_score": 10,
+      "description": "Low-value noise."
+    }
+  },
+
   "lm_studio": {
     "url": "http://localhost:1234",
     "model": "qwen2.5-3b-instruct",
@@ -14,6 +47,7 @@
   "telegram": {
     "bot_token": "YOUR_BOT_TOKEN_HERE",
     "chat_id": "YOUR_CHAT_ID_HERE",
+    "feedback_buttons": true,
     "_help": "Bot token from @BotFather. Chat ID from @userinfobot."
   },
 

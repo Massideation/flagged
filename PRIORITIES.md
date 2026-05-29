@@ -11,9 +11,10 @@ and media. I run multiple projects and build in public.
 Edit this section to describe who you are and what you're working on.
 
 ## Raise to 9-10 (Drop everything)
-- Event invites with an RSVP deadline or calendar attachment
+- Direct outreach from a real person who appears to know me, my work, Stack, or Mass Ideation
+- Customer or user questions that look like they need a response
+- Warm partnership, client, paid-work, or collaboration opportunities
 - Speaking, panel, or podcast guest requests
-- Named invitations to crypto conferences, web3 summits, AI events
 - Direct outreach from known crypto projects: Arbitrum, Base, Solana, Ethereum Foundation, a16z, Multicoin, Paradigm, Coinbase Ventures
 - Term sheets, LOIs, partnership proposals with actual numbers
 - Press and media interview requests (crypto, AI, finance media)
@@ -42,10 +43,13 @@ Edit this section to describe who you are and what you're working on.
 - Mass marketing emails and promotions
 - Automated platform notifications (GitHub, Notion, etc.)
 - Newsletter subscriptions I haven't personally engaged with
+- Event blasts, RSVP promos, and webinar invites that were sent to a list
 - Cold sales outreach with templated language
 - Crypto airdrops, token promotions, presale announcements
 - "Just checking in" emails with no specific ask
-- Receipts and transactional emails
+- Receipts, bills, Uber/travel receipts, invoices, refunds, and transactional emails
+- Affiliate payouts unless unusually large or requiring action
+- Anyone selling me software, services, lead generation, ads, courses, or agencies
 
 ## Known High-Priority Senders (always raise to at least 8)
 # Add names/domains here as you build relationships

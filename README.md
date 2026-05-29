@@ -16,19 +16,24 @@
 
 ## What It Does
 
-Flagged monitors your Gmail accounts every few minutes, scores every unread email 1–10 using a **local AI model running on your own machine**, and fires a Telegram alert when something scores above your threshold.
+Flagged monitors your Gmail accounts every few minutes, classifies unread email using a **local AI model running on your own machine**, and routes each message into an attention channel:
+
+- **Opportunity Radar** - immediate Telegram alerts for real people, customers, friends, partners, paid work, and direct asks worth deciding on
+- **Money/Admin** - digest by default for bills, receipts, refunds, affiliate payouts, and account notices
+- **Learning/Events** - digest by default for newsletters, webinars, launches, and event blasts
+- **Sales Pitches / Muted** - suppressed by default
 
 **You stay in the loop. You respond in Gmail. Flagged just makes sure nothing important gets buried.**
 
 ```
-🔴 URGENT — Main Inbox
+🔴 URGENT — Opportunity Radar (Main Inbox)
 
-🎟 INVITE
-From: events@arbitrum.foundation
-Subject: You're invited to Arbitrum Dev Day
-Score: 9/10 — Direct event invite with RSVP deadline from known crypto project
+💬 CUSTOMER
+From: Jane Founder <jane@example.com>
+Subject: Question about working with Mass Ideation
+Score: 9/10 — Direct customer inquiry with a specific ask
 
-"Join us on March 15th. We'd love for you to speak..."
+"Hey Miguel, I saw your AI workflow work and wanted to ask..."
 ```
 
 ---
@@ -93,6 +98,14 @@ Full walkthrough → [SETUP.md](SETUP.md)
 
 ---
 
+## OpenClaw
+
+Flagged can run beside a local OpenClaw setup today: Gmail is read through the Gmail API, classification happens locally through LM Studio, and alerts go to Telegram where OpenClaw can help with follow-up actions you explicitly ask for.
+
+It is not yet packaged as an OpenClaw plugin. See [docs/OPENCLAW.md](docs/OPENCLAW.md) for the current integration path and plugin roadmap.
+
+---
+
 ## Model Recommendations
 
 Flagged works with any OpenAI-compatible local model via LM Studio. For email classification, **smaller is better** — you want fast and accurate, not large and slow.
@@ -114,6 +127,22 @@ Flagged works with any OpenAI-compatible local model via LM Studio. For email cl
 
 The `PRIORITIES.md` file is Flagged's brain. It tells the AI model who you are, what you care about, and what should wake you up vs. what should stay quiet.
 
+The `alert_channels` section in `config.json` controls what happens after classification:
+
+```json
+"alert_channels": {
+  "opportunities": { "mode": "immediate", "min_score": 7 },
+  "money_admin": { "mode": "digest", "min_score": 9 },
+  "learning_events": { "mode": "digest", "min_score": 8 },
+  "sales_pitches": { "mode": "mute", "min_score": 10 }
+}
+```
+
+Supported modes:
+- `immediate` sends a Telegram alert now
+- `digest` records/logs the item for later batching
+- `mute` suppresses the item
+
 Edit it to match your life:
 
 ```markdown
@@ -126,6 +155,8 @@ Edit it to match your life:
 ## Keep at 1-4 (Do not alert)
 - Marketing newsletters
 - Automated platform notifications
+- Bills, receipts, refunds, Uber/travel receipts
+- Cold sales outreach and generic event blasts
 ```
 
 Changes apply on the next poll — no restart needed.
@@ -171,14 +202,18 @@ One `credentials.json` works for all accounts. Each account gets its own token f
 ## Telegram Alert Format
 
 ```
-🔴 URGENT — Personal
+🔴 URGENT — Opportunity Radar (Personal)
 
 🤝 PARTNERSHIP
 From: founder@coolproject.xyz
 Subject: Collab idea — would love to chat
 Score: 8/10 — Direct personal outreach, specific ask, no template language
+Sender: person / prospect
+Ask: needs_reply
 
 "Hey, I've been following your work and wanted to..."
+
+[Good alert] [Mute type] [Digest only]
 ```
 
 Emoji legend:
