@@ -104,6 +104,8 @@ Flagged can run beside a local OpenClaw setup today: Gmail is read through the G
 
 It is not yet packaged as an OpenClaw plugin. See [docs/OPENCLAW.md](docs/OPENCLAW.md) for the current integration path and plugin roadmap.
 
+For the product direction and next engineering steps, see [docs/OPPORTUNITY_RADAR.md](docs/OPPORTUNITY_RADAR.md).
+
 ---
 
 ## Model Recommendations
