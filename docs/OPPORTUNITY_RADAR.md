@@ -90,6 +90,23 @@ Telegram buttons should not just record feedback. They should update a local lea
 
 That file should be injected into the classifier prompt on every run.
 
+### Alert Scope Management
+
+Users need a visible control surface for what gets alerted. The first version is a terminal command:
+
+    python flagged.py scope show
+    python flagged.py scope set opportunities --mode immediate --min-score 7
+    python flagged.py scope set money_admin --mode digest
+    python flagged.py scope set learning_events --mode mute
+
+This should later become a small web/OpenClaw surface where a user can see and edit:
+
+- immediate alert categories
+- digest categories
+- muted categories
+- examples that taught the system
+- sender-specific rules
+
 ### 5. Add Digest Delivery
 
 Digest-mode messages should not disappear. They should be batched:

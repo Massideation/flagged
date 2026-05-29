@@ -14,9 +14,8 @@ import json
 import time
 import pickle
 import logging
+import argparse
 from pathlib import Path
-
-import requests
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -70,6 +69,9 @@ DEFAULT_ALERT_CHANNELS = {
     }
 }
 
+def default_alert_channels():
+    return json.loads(json.dumps(DEFAULT_ALERT_CHANNELS))
+
 # ── Config ────────────────────────────────────────────────────────────────────
 def load_config():
     if not CONFIG_PATH.exists():
@@ -78,8 +80,69 @@ def load_config():
         )
     with open(CONFIG_PATH) as f:
         config = json.load(f)
-    config.setdefault("alert_channels", DEFAULT_ALERT_CHANNELS)
+    config.setdefault("alert_channels", default_alert_channels())
     return config
+
+def save_config(config: dict):
+    with open(CONFIG_PATH, "w") as f:
+        json.dump(config, f, indent=2)
+        f.write("\n")
+
+def print_alert_scope(config: dict):
+    """Print the current alert routing policy in a human-readable form."""
+    print("\nAlert Scope\n")
+    print(f"Config: {CONFIG_PATH}")
+    print(f"Priority context: {PRIORITIES_PATH}")
+    print("\nChannels:")
+
+    channels = config.get("alert_channels", default_alert_channels())
+    for name, channel in channels.items():
+        label = channel.get("label", name)
+        mode = channel.get("mode", "mute")
+        min_score = channel.get("min_score", config.get("score_threshold", 7))
+        description = channel.get("description", "")
+        print(f"- {name}: {label}")
+        print(f"  mode: {mode}")
+        print(f"  min_score: {min_score}")
+        if description:
+            print(f"  scope: {description}")
+
+    print("\nModes:")
+    print("- immediate: send a Telegram alert now")
+    print("- digest: save for a later summary")
+    print("- mute: suppress")
+
+def set_alert_scope(config: dict, channel_name: str, mode: str = None,
+                    min_score: int = None, description: str = None):
+    channels = config.setdefault("alert_channels", default_alert_channels())
+    if channel_name not in channels:
+        raise ValueError(
+            f"Unknown channel '{channel_name}'. Known channels: {', '.join(channels)}"
+        )
+
+    channel = channels[channel_name]
+    if mode:
+        if mode not in {"immediate", "digest", "mute"}:
+            raise ValueError("mode must be one of: immediate, digest, mute")
+        channel["mode"] = mode
+    if min_score is not None:
+        channel["min_score"] = max(1, min(10, int(min_score)))
+    if description:
+        channel["description"] = description
+    save_config(config)
+    return channel
+
+def load_scope_config(require_existing: bool = False):
+    if CONFIG_PATH.exists():
+        return load_config(), False
+    if require_existing:
+        raise FileNotFoundError(
+            "config.json not found. Run python setup_wizard.py before editing alert scope."
+        )
+    return {
+        "score_threshold": 7,
+        "alert_channels": default_alert_channels(),
+    }, True
 
 def load_priorities():
     """Load your personal context window for the classifier prompt."""
@@ -219,10 +282,12 @@ def score_email(email: dict, priorities_context: str, config: dict) -> dict:
     Never sends the full email body.
     Everything stays on your Mac Mini.
     """
+    import requests
+
     lm_url = config["lm_studio"]["url"]
     model = config["lm_studio"]["model"]
 
-    alert_channels = json.dumps(config.get("alert_channels", DEFAULT_ALERT_CHANNELS), indent=2)
+    alert_channels = json.dumps(config.get("alert_channels", default_alert_channels()), indent=2)
 
     prompt = f"""You are Flagged, a local opportunity-radar classifier for a specific person.
 
@@ -301,7 +366,7 @@ Return ONLY a raw JSON object. No explanation. No markdown. No backticks.
 
 def normalize_score_data(score_data: dict, config: dict) -> dict:
     """Backfill newer opportunity-radar fields when older models omit them."""
-    channels = config.get("alert_channels", DEFAULT_ALERT_CHANNELS)
+    channels = config.get("alert_channels", default_alert_channels())
     category = score_data.get("category", "other")
 
     category_to_channel = {
@@ -322,7 +387,7 @@ def normalize_score_data(score_data: dict, config: dict) -> dict:
     }
 
     channel = score_data.get("alert_channel") or category_to_channel.get(category, "muted")
-    channel_config = channels.get(channel, channels.get("muted", DEFAULT_ALERT_CHANNELS["muted"]))
+    channel_config = channels.get(channel, channels.get("muted", default_alert_channels()["muted"]))
 
     score_data["score"] = int(score_data.get("score", 1))
     score_data["category"] = category
@@ -338,9 +403,9 @@ def normalize_score_data(score_data: dict, config: dict) -> dict:
 
 def alert_decision(score_data: dict, config: dict) -> dict:
     """Return how this email should be handled: immediate, digest, or mute."""
-    channels = config.get("alert_channels", DEFAULT_ALERT_CHANNELS)
+    channels = config.get("alert_channels", default_alert_channels())
     channel_name = score_data.get("alert_channel", "muted")
-    channel = channels.get(channel_name, channels.get("muted", DEFAULT_ALERT_CHANNELS["muted"]))
+    channel = channels.get(channel_name, channels.get("muted", default_alert_channels()["muted"]))
     mode = score_data.get("alert_mode") or channel.get("mode", "mute")
     min_score = int(channel.get("min_score", config.get("score_threshold", 7)))
     score = int(score_data.get("score", 1))
@@ -358,6 +423,8 @@ def alert_decision(score_data: dict, config: dict) -> dict:
 
 def process_telegram_feedback(config: dict):
     """Collect Telegram button feedback into feedback.json for tuning."""
+    import requests
+
     telegram_config = config.get("telegram", {})
     if telegram_config.get("feedback_buttons", True) is False:
         return
@@ -446,6 +513,8 @@ CATEGORY_EMOJI = {
 
 def send_telegram(email: dict, score_data: dict, account_label: str, config: dict, decision: dict):
     """Send a Telegram alert for a high-priority email."""
+    import requests
+
     bot_token = config["telegram"]["bot_token"]
     chat_id = config["telegram"]["chat_id"]
 
@@ -504,6 +573,8 @@ def send_telegram(email: dict, score_data: dict, account_label: str, config: dic
 
 def send_startup_message(config: dict):
     """Send a message when the monitor boots up."""
+    import requests
+
     try:
         accounts = [a["label"] for a in config["accounts"]]
         requests.post(
@@ -585,5 +656,67 @@ def run():
         log.info(f"Cycle complete. Next check in {interval}s...")
         time.sleep(interval)
 
-if __name__ == "__main__":
+def main():
+    parser = argparse.ArgumentParser(
+        description="Flagged local email opportunity radar"
+    )
+    subparsers = parser.add_subparsers(dest="command")
+
+    scope_parser = subparsers.add_parser(
+        "scope",
+        help="Show or edit alert scope settings"
+    )
+    scope_subparsers = scope_parser.add_subparsers(dest="scope_command")
+
+    scope_subparsers.add_parser("show", help="Show current alert scope")
+
+    set_parser = scope_subparsers.add_parser(
+        "set",
+        help="Update one alert channel"
+    )
+    set_parser.add_argument(
+        "channel",
+        help="Alert channel, e.g. opportunities, money_admin, learning_events, sales_pitches"
+    )
+    set_parser.add_argument(
+        "--mode",
+        choices=["immediate", "digest", "mute"],
+        help="How this channel should be delivered"
+    )
+    set_parser.add_argument(
+        "--min-score",
+        type=int,
+        help="Minimum score required for this channel"
+    )
+    set_parser.add_argument(
+        "--description",
+        help="Plain-English scope description for this channel"
+    )
+
+    args = parser.parse_args()
+
+    if args.command == "scope":
+        config, using_defaults = load_scope_config(
+            require_existing=args.scope_command == "set"
+        )
+        if args.scope_command in (None, "show"):
+            if using_defaults:
+                print("config.json not found; showing default alert scope.\n")
+            print_alert_scope(config)
+            return
+        if args.scope_command == "set":
+            updated = set_alert_scope(
+                config,
+                channel_name=args.channel,
+                mode=args.mode,
+                min_score=args.min_score,
+                description=args.description,
+            )
+            print(f"Updated {args.channel}:")
+            print(json.dumps(updated, indent=2))
+            return
+
     run()
+
+if __name__ == "__main__":
+    main()

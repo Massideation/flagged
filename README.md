@@ -145,6 +145,12 @@ Supported modes:
 - `digest` records/logs the item for later batching
 - `mute` suppresses the item
 
+You can inspect or change this from the terminal:
+
+    python flagged.py scope show
+    python flagged.py scope set money_admin --mode digest --min-score 9
+    python flagged.py scope set learning_events --mode mute
+
 Edit it to match your life:
 
 ```markdown
