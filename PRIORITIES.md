@@ -14,6 +14,7 @@ Edit this section to describe who you are and what you're working on.
 - Direct outreach from a real person who appears to know me, my work, Stack, or Mass Ideation
 - Customer or user questions that look like they need a response
 - Warm partnership, client, paid-work, or collaboration opportunities
+- Time-sensitive school or family logistics that require me to see or act
 - Speaking, panel, or podcast guest requests
 - Direct outreach from known crypto projects: Arbitrum, Base, Solana, Ethereum Foundation, a16z, Multicoin, Paradigm, Coinbase Ventures
 - Term sheets, LOIs, partnership proposals with actual numbers
@@ -32,6 +33,7 @@ Edit this section to describe who you are and what you're working on.
 - Anything from a .eth address or known crypto founder
 - User inquiries or onboarding questions for your projects
 - Developer outreach related to your products
+- Emails from my kid's school that are specific to my family, schedule, pickup, events, forms, deadlines, or action required
 
 ## Raise to 5-6 (Check when you have time)
 - Interesting project announcements or product launches in AI/crypto

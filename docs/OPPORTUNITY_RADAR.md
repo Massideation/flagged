@@ -14,6 +14,7 @@ Immediate Telegram alerts should be reserved for email that looks like:
 - A customer or user asking a question.
 - A friend, warm contact, founder, partner, or known person opening a door.
 - A paid-work, client, partnership, media, podcast, speaking, investor, or collaboration opportunity.
+- A school/family email that is specific to the user's child, schedule, event, form, deadline, or action required.
 - A time-sensitive opportunity where missing it would matter.
 
 The alert should explain why it matters and what kind of choice it creates.

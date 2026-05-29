@@ -55,6 +55,24 @@ class AlertRoutingTests(unittest.TestCase):
         self.assertEqual(decision["channel"], "sales_pitches")
         self.assertFalse(decision["send_now"])
 
+    def test_school_family_email_can_be_opportunity(self):
+        score_data = flagged.normalize_score_data(
+            {
+                "score": 8,
+                "category": "opportunity",
+                "reason": "Kid's school sent a specific action-required update.",
+                "relationship": "knows_me",
+                "ask_type": "needs_reply",
+                "alert_channel": "opportunities",
+            },
+            {},
+        )
+
+        decision = flagged.alert_decision(score_data, {})
+
+        self.assertEqual(decision["mode"], "immediate")
+        self.assertTrue(decision["send_now"])
+
 
 if __name__ == "__main__":
     unittest.main()
