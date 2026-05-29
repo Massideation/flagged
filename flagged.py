@@ -262,7 +262,9 @@ Return ONLY a raw JSON object. No explanation. No markdown. No backticks.
   "ask_type": "<one of: needs_reply|decision|fyi|payment|promo|sales|none>",
   "alert_channel": "<one of: opportunities|money_admin|learning_events|sales_pitches|muted>",
   "alert_mode": "<one of: immediate|digest|mute>",
-  "confidence": <integer 1-10>
+  "confidence": <integer 1-10>,
+  "why_flagged": "<why this should or should not get attention>",
+  "why_not_noise": "<why this is not merely a newsletter, bill, receipt, sales pitch, or automated update; if it is noise, say so>"
 }}"""
 
     try:
@@ -330,6 +332,8 @@ def normalize_score_data(score_data: dict, config: dict) -> dict:
     score_data["alert_channel"] = channel
     score_data["alert_mode"] = score_data.get("alert_mode") or channel_config.get("mode", "mute")
     score_data["confidence"] = int(score_data.get("confidence", 5))
+    score_data["why_flagged"] = score_data.get("why_flagged") or score_data.get("reason", "")
+    score_data["why_not_noise"] = score_data.get("why_not_noise") or "No separate noise check provided."
     return score_data
 
 def alert_decision(score_data: dict, config: dict) -> dict:
@@ -468,7 +472,9 @@ def send_telegram(email: dict, score_data: dict, account_label: str, config: dic
         f"Subject: {email['subject']}\n"
         f"Score: {score}/10 — {reason}\n"
         f"Sender: {score_data.get('sender_type')} / {score_data.get('relationship')}\n"
-        f"Ask: {score_data.get('ask_type')}\n\n"
+        f"Ask: {score_data.get('ask_type')}\n"
+        f"Why flagged: {score_data.get('why_flagged')}\n"
+        f"Noise check: {score_data.get('why_not_noise')}\n\n"
         f"“{preview}...”"
     )
 

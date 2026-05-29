@@ -76,6 +76,8 @@ It should return:
 - alert mode
 - confidence
 - reason
+- why flagged
+- why it is not just newsletter/admin/sales noise
 
 ### 4. Make Feedback Change Future Results
 
@@ -148,6 +150,7 @@ The public demo should show the contrast:
 - Customer question: immediate alert.
 - Warm opportunity: immediate alert.
 - User taps "Mute type" and the system improves.
+- Every immediate alert explains why it fired and why it was not treated as newsletter/admin/sales noise.
 
 The message:
 

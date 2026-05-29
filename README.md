@@ -212,6 +212,8 @@ Subject: Collab idea — would love to chat
 Score: 8/10 — Direct personal outreach, specific ask, no template language
 Sender: person / prospect
 Ask: needs_reply
+Why flagged: Founder appears to be reaching out directly with a collaboration ask.
+Noise check: Not a newsletter, bill, receipt, or sales pitch; no list/unsubscribe language.
 
 "Hey, I've been following your work and wanted to..."
 

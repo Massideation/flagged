@@ -20,6 +20,8 @@ class AlertRoutingTests(unittest.TestCase):
         self.assertEqual(decision["mode"], "immediate")
         self.assertEqual(decision["channel"], "opportunities")
         self.assertTrue(decision["send_now"])
+        self.assertEqual(score_data["why_flagged"], "Customer asks a direct question.")
+        self.assertIn("noise", score_data["why_not_noise"].lower())
 
     def test_money_admin_defaults_to_digest(self):
         score_data = flagged.normalize_score_data(
