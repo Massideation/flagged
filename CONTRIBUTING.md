@@ -1,6 +1,6 @@
 # Contributing to Flagged
 
-Thanks for wanting to contribute. Flagged is intentionally simple — keep PRs focused.
+Thanks for wanting to contribute. Flagged is intentionally simple: it highlights important emails without becoming a full email client. Keep PRs focused on that job.
 
 ---
 
@@ -12,6 +12,8 @@ Thanks for wanting to contribute. Flagged is intentionally simple — keep PRs f
 - systemd service template for Linux
 - Docker container with docs
 - Web dashboard for scored email history
+- Better default importance presets for founders, families, freelancers, and small teams
+- Evaluation fixtures for important vs. noisy emails
 - ProtonMail Bridge / Fastmail support
 - Windows Task Scheduler setup guide
 - Webhook support for custom notification targets
@@ -21,6 +23,7 @@ Thanks for wanting to contribute. Flagged is intentionally simple — keep PRs f
 - Add a `--dry-run` flag that scores emails without sending alerts
 - Add a `--test` flag that sends a test Telegram message
 - Better error messages when LM Studio isn't running
+- Add example `PRIORITIES.md` profiles for common use cases
 
 ---
 
@@ -46,7 +49,7 @@ Thanks for wanting to contribute. Flagged is intentionally simple — keep PRs f
 
 ## Privacy Principle
 
-Flagged's core promise is local-first. Any contribution that requires sending email body content to a remote API should be opt-in and clearly documented.
+Flagged's core promise is local-first important-email highlighting. Any contribution that requires sending email body content to a remote API should be opt-in and clearly documented.
 
 ---
 

@@ -1,10 +1,10 @@
-# Opportunity Radar
+# Important Email Highlighter
 
 Flagged's core product promise:
 
-> Tell me about the opportunities in my email that I would probably miss because I do not open email enough, without making me sort through newsletters, bills, receipts, and sales pitches.
+> Highlight the important emails I would otherwise miss, without making me pay for a premium email client or sort through newsletters, bills, receipts, and sales pitches.
 
-Flagged is not trying to become a full email client. It is a local-first radar for choices worth making.
+Flagged is not trying to become a full email client. It is a local-first important-email highlighter that works with the inbox you already use.
 
 ## What Should Alert Immediately
 
@@ -64,7 +64,7 @@ If the gate is confident, route the message to digest or mute without spending m
 
 The LLM should focus on the hard question:
 
-> Is this a real opportunity or real person Miguel should know about?
+> Is this an important email from a real person or important institution that the user should see now?
 
 It should return:
 
@@ -172,4 +172,4 @@ The public demo should show the contrast:
 
 The message:
 
-> Stop missing customer emails and opportunities because your inbox is full of junk.
+> Stop paying for a full premium inbox just to highlight the emails you cannot afford to miss.

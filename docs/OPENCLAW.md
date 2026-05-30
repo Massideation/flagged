@@ -1,13 +1,13 @@
 # Flagged + OpenClaw
 
-Flagged is currently a standalone local email monitor that can run on the same machine as OpenClaw.
+Flagged is currently a standalone local important-email highlighter that can run on the same machine as OpenClaw.
 
 ## What Works Now
 
 - Gmail is read through the Gmail API with read-only OAuth scopes.
 - Email metadata and snippets are classified locally through LM Studio.
 - Telegram alerts can be delivered to the same chat or channel OpenClaw monitors.
-- OpenClaw can then help with follow-up tasks when the user asks, such as pulling a link from an email, summarizing an opportunity, drafting a reply, or adding a follow-up reminder.
+- OpenClaw can then help with follow-up tasks when the user asks, such as pulling a link from an email, summarizing the thread, drafting a reply, or adding a follow-up reminder.
 
 In this mode, Flagged is the watcher and classifier. OpenClaw is the operator the user can call on after an alert.
 
@@ -36,9 +36,9 @@ The next step is to make Flagged installable as a first-class OpenClaw companion
 
 ## Product Boundary
 
-Flagged should not become a generic email client. Its job is opportunity routing:
+Flagged should not become a generic email client. Its job is important-email highlighting:
 
-- Immediate alerts: real people, customers, friends, warm opportunities, direct asks.
+- Immediate alerts: real people, customers, friends, school/family logistics, warm opportunities, direct asks.
 - Digest: bills, admin, affiliate payouts, newsletters, and events.
 - Muted: sales pitches, promos, receipts, and low-value automated noise.
 

@@ -7,10 +7,10 @@
 
   "alert_channels": {
     "opportunities": {
-      "label": "Opportunity Radar",
+      "label": "Important Email",
       "mode": "immediate",
       "min_score": 7,
-      "description": "Actual people, customers, friends, partners, prospects, paid work, and direct asks worth deciding on."
+      "description": "Actual people, customers, friends, partners, prospects, school/family logistics, paid work, and direct asks you cannot afford to miss."
     },
     "money_admin": {
       "label": "Money/Admin",

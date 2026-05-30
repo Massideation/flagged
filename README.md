@@ -1,6 +1,6 @@
-# 📬 Flagged
+# Flagged
 
-**Your inbox, filtered by what actually matters. Local AI. Zero cloud. Telegram alerts.**
+**Open-source important-email highlighting. Local AI. Zero cloud. No Superhuman subscription.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
@@ -9,24 +9,24 @@
 
 ---
 
-> *"I missed an Arbitrum event invite because it was buried in 300 unread emails. I built this so it never happens again."*
+> *"I was paying for Superhuman mostly because it highlighted the important emails I could not afford to miss. Flagged is the open-source version of that one job."*
 > — [@msanchezworld](https://github.com/MSanchezWorld)
 
 ---
 
 ## What It Does
 
-Flagged monitors your Gmail accounts every few minutes, classifies unread email using a **local AI model running on your own machine**, and routes each message into an attention channel:
+Flagged monitors your Gmail accounts every few minutes, classifies unread email using a **local AI model running on your own machine**, and highlights the messages that are actually worth your attention.
 
-- **Opportunity Radar** - immediate Telegram alerts for real people, customers, friends, partners, paid work, and direct asks worth deciding on
+- **Important Email Highlighter** - immediate Telegram alerts for real people, customers, friends, partners, paid work, school/family logistics, and direct asks worth deciding on
 - **Money/Admin** - digest by default for bills, receipts, refunds, affiliate payouts, and account notices
 - **Learning/Events** - digest by default for newsletters, webinars, launches, and event blasts
 - **Sales Pitches / Muted** - suppressed by default
 
-**You stay in the loop. You respond in Gmail. Flagged just makes sure nothing important gets buried.**
+**You keep your current inbox. You respond in Gmail. Flagged just makes sure the important stuff does not get buried.**
 
 ```
-🔴 URGENT — Opportunity Radar (Main Inbox)
+🔴 URGENT — Important Email (Main Inbox)
 
 💬 CUSTOMER
 From: Jane Founder <jane@example.com>
@@ -40,14 +40,16 @@ Score: 9/10 — Direct customer inquiry with a specific ask
 
 ## Why Flagged?
 
-| Feature | Flagged | Zapier/email tools | SaaS AI email |
+Most AI email products want to become your whole inbox. Flagged is intentionally narrower: it replaces the one Superhuman-style job many people actually need, highlighting the emails they cannot afford to miss.
+
+| Feature | Flagged | Email rules/Zapier | SaaS AI inboxes |
 |---|---|---|---|
 | **Your data stays local** | ✅ | ❌ | ❌ |
 | **No subscription fee** | ✅ | ❌ | ❌ |
-| **Tunable to your world** | ✅ | Limited | Limited |
+| **Tunable importance rules** | ✅ | Limited | Limited |
 | **Works across multiple inboxes** | ✅ | Paid tier | Paid tier |
-| **Runs 24/7 on your own machine** | ✅ | Cloud-dependent | Cloud-dependent |
-| **No vendor lock-in** | ✅ | ❌ | ❌ |
+| **Highlights, not a new email client** | ✅ | Partial | ❌ |
+| **No vendor lock-in** | ✅ | Limited | ❌ |
 
 ---
 
@@ -127,16 +129,18 @@ Flagged works with any OpenAI-compatible local model via LM Studio. For email cl
 
 ## Tuning Flagged to Your World
 
-The `PRIORITIES.md` file is Flagged's brain. It tells the AI model who you are, what you care about, and what should wake you up vs. what should stay quiet.
+The `PRIORITIES.md` file is Flagged's brain. It tells the AI model who you are, what counts as important in your world, and what should wake you up vs. what should stay quiet.
 
 The `alert_channels` section in `config.json` controls what happens after classification:
 
 ```json
-"alert_channels": {
-  "opportunities": { "mode": "immediate", "min_score": 7 },
-  "money_admin": { "mode": "digest", "min_score": 9 },
-  "learning_events": { "mode": "digest", "min_score": 8 },
-  "sales_pitches": { "mode": "mute", "min_score": 10 }
+{
+  "alert_channels": {
+    "opportunities": { "mode": "immediate", "min_score": 7 },
+    "money_admin": { "mode": "digest", "min_score": 9 },
+    "learning_events": { "mode": "digest", "min_score": 8 },
+    "sales_pitches": { "mode": "mute", "min_score": 10 }
+  }
 }
 ```
 
@@ -210,7 +214,7 @@ One `credentials.json` works for all accounts. Each account gets its own token f
 ## Telegram Alert Format
 
 ```
-🔴 URGENT — Opportunity Radar (Personal)
+🔴 URGENT — Important Email (Personal)
 
 🤝 PARTNERSHIP
 From: founder@coolproject.xyz
@@ -241,6 +245,7 @@ Ideas for contributions:
 - **Outlook / Microsoft 365 support** — big one
 - **Slack / Discord notification support** (alongside Telegram)
 - **Web dashboard** for viewing scored email history
+- **Better importance presets** for founders, families, freelancers, and small teams
 - **Webhook support** for custom integrations
 - **Linux systemd service template**
 - **Docker container**

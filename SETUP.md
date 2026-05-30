@@ -1,5 +1,7 @@
 # Setup Guide
 
+Flagged is an open-source important-email highlighter. The setup goal is simple: connect Gmail read-only, run local AI through LM Studio, and get Telegram alerts only when an email is important enough to break through.
+
 ## Step 1 — Dependencies
 
 ```bash
@@ -131,10 +133,11 @@ The `.gitignore` prevents secrets from ever being committed. Only safe files go 
 
 ## Updating PRIORITIES.md
 
-Edit `PRIORITIES.md` anytime to tune what gets surfaced. Examples of things to add:
+Edit `PRIORITIES.md` anytime to tune what gets highlighted. Examples of things to add:
 - Known high-priority sender domains (e.g., `arbitrum.foundation`)
 - New projects you're working on
-- Specific keywords that should always trigger an alert
+- School, family, customer, partner, or billing patterns that should always trigger an alert
+- Specific keywords that should always raise or suppress importance
 
 Changes apply on the next poll — no restart needed.
 

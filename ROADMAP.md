@@ -1,9 +1,9 @@
 # Flagged — Product Roadmap
-## From Email Monitor to Autonomous Email Agent
+## From Important-Email Highlighter to Trusted Email Agent
 
 **Domain:** flagged.email  
 **Repo:** github.com/Massideation/flagged  
-**Core principle:** Test first, earn trust, then automate. Never give an agent permissions you haven't watched it earn.
+**Core principle:** Start with the one job people actually pay for: show them the emails they cannot afford to miss. Test first, earn trust, then automate.
 
 ---
 
@@ -12,7 +12,7 @@
 Every action the agent takes autonomously is one you've already approved manually dozens of times. The roadmap is about moving things from "you decide" to "agent decides" only after the pattern is proven reliable.
 
 ```
-v1  Watch and tell you
+v1  Highlight important emails
 v2  Propose and you approve with one tap
 v3  Act automatically on patterns you've pre-approved
 ```
@@ -20,22 +20,22 @@ v3  Act automatically on patterns you've pre-approved
 ---
 
 ## Stage 1 — Monitor (Now)
-**Tagline:** *Your inbox, filtered by what actually matters.*
+**Tagline:** *Open-source important-email highlighting.*
 
 ### What it does
 - Watches all Gmail accounts every 5 minutes
 - Scores every unread email 1–10 using local LLM (no data leaves your machine)
-- Fires Telegram alert for anything above your threshold
+- Fires Telegram alert for important emails above your threshold
 - Alert includes: sender, subject, score, reason, 400-char preview
 
 ### What you do after the alert
 Everything. You open Gmail and respond manually.
 
 ### Goal of this stage
-Run it for 2–4 weeks. Watch whether the scores make sense. Edit PRIORITIES.md to tune it. Build trust in the model's judgment before giving it any actions.
+Run it for 2–4 weeks as a Superhuman replacement for highlighting important mail. Watch whether the scores make sense. Edit PRIORITIES.md to tune it. Build trust in the model's judgment before giving it any actions.
 
 ### Success metric
-You catch things you would have missed. Scores feel right 80%+ of the time.
+You stop missing important emails without switching email clients or paying for a premium inbox. Scores feel right 80%+ of the time.
 
 ---
 
@@ -161,7 +161,7 @@ Closes the loop without you tracking it manually.
 
 | Tier | What it includes | Price |
 |---|---|---|
-| **Open Source** | Stage 1 monitor, self-hosted | Free |
+| **Open Source** | Stage 1 important-email highlighter, self-hosted | Free |
 | **Flagged Pro** | Hosted monitor, no Mac Mini needed | ~$12/mo |
 | **Flagged Agent** | Stage 2 supervised actions, template library | ~$29/mo |
 | **Flagged Autonomous** | Stage 3 full agent, context enrichment | ~$59/mo |
@@ -189,7 +189,7 @@ GLM-4.7 already supports tool-use / function calling — the model can handle al
 
 ## Launch Sequence
 
-1. ✅ **Now** — Push v1 to github.com/Massideation/flagged
+1. ✅ **Now** — Push v1 to github.com/Massideation/flagged with the important-email highlighter positioning
 2. **Week 1-2** — Run it yourself, tune PRIORITIES.md, collect response templates
 3. **Week 3-4** — Post launch on Twitter/X, r/LocalLLaMA, ProductHunt
 4. **Month 2** — Build Stage 2 supervised actions (calendar link + template responses first)
@@ -200,4 +200,4 @@ GLM-4.7 already supports tool-use / function calling — the model can handle al
 
 ## The North Star
 
-Someone misses a $50K partnership opportunity because it got buried in their inbox. That person finds Flagged, sets it up in 10 minutes, and never misses one again. That's the product. Everything in this roadmap is in service of that outcome.
+Someone pays for a premium email client mostly because it highlights the messages they cannot afford to miss. That person finds Flagged, sets it up in 10 minutes, keeps using Gmail, and never misses one again. That's the product. Everything in this roadmap is in service of that outcome.
