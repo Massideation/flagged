@@ -6,7 +6,7 @@ Flagged is currently a standalone important-email highlighter that can run on th
 
 - Gmail is read through the Gmail API with read-only OAuth scopes.
 - Email metadata and snippets are classified through the configured model provider: local open-source models by default, or a frontier model endpoint if the user chooses that tradeoff.
-- Telegram alerts can be delivered to the same chat or channel OpenClaw monitors.
+- V1 Telegram alerts can be delivered to the same chat or channel OpenClaw monitors.
 - OpenClaw can then help with follow-up tasks when the user asks, such as pulling a link from an email, summarizing the thread, drafting a reply, or adding a follow-up reminder.
 
 In this mode, Flagged is the watcher and classifier. OpenClaw is the operator the user can call on after an alert.
@@ -31,6 +31,7 @@ The next step is to make Flagged installable as a first-class OpenClaw companion
 - Add an OpenClaw plugin manifest.
 - Provide a setup command that reuses OpenClaw's local configuration where possible.
 - Let alerts route through OpenClaw's message delivery layer instead of requiring a separate Telegram bot token.
+- Add Slack, Discord, webhook, and other delivery targets without changing the core classifier.
 - Add OpenClaw actions for approved follow-ups: summarize thread, pull links, draft response, create reminder, and classify feedback.
 - Keep Gmail read-only by default. Sending email should remain an explicit supervised feature, not part of the default install.
 

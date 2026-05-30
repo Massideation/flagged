@@ -10,7 +10,7 @@ The model layer should stay flexible: local open-source models for private, chea
 
 ## What Should Alert Immediately
 
-Immediate Telegram alerts should be reserved for email that looks like:
+Immediate alerts should be reserved for email that looks like:
 
 - A real person reaching out directly.
 - A customer or user asking a question.
@@ -115,7 +115,7 @@ This should later become a small web/OpenClaw surface where a user can see and e
 Digest-mode messages should not disappear. They should be batched:
 
 - daily digest by default
-- optional Telegram command to ask for "what did I miss?"
+- optional command to ask for "what did I miss?" through the active delivery channel
 - grouped by Money/Admin, Learning/Events, Sales Pitches, Other
 
 The immediate channel stays clean.
@@ -147,6 +147,8 @@ OpenClaw should handle actions after an alert, not replace the classifier:
 - mark feedback from Telegram
 
 Longer term, Flagged should expose a local event file or webhook that OpenClaw can subscribe to.
+
+Telegram is the v1 delivery path, not the product boundary. Slack, Discord, webhooks, and OpenClaw-native delivery should be treated as channel adapters around the same important-email classifier.
 
 ## Dogfood Loop
 

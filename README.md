@@ -1,6 +1,6 @@
 # Flagged
 
-**Open-source important-email highlighting. Use frontier or open-source models. No Superhuman subscription.**
+**Open-source important-email highlighter. Keep using Gmail and surface emails that are too important to miss with frontier or open-source models.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
@@ -18,7 +18,7 @@
 
 Flagged monitors your Gmail accounts every few minutes, classifies unread email using a **frontier or open-source model you choose**, and highlights the messages that are actually worth your attention.
 
-- **Important Email Highlighter** - immediate Telegram alerts for real people, customers, friends, partners, paid work, school/family logistics, and direct asks worth deciding on
+- **Important Email Highlighter** - immediate alerts for real people, customers, friends, partners, paid work, school/family logistics, and direct asks worth deciding on
 - **Money/Admin** - digest by default for bills, receipts, refunds, affiliate payouts, and account notices
 - **Learning/Events** - digest by default for newsletters, webinars, launches, and event blasts
 - **Sales Pitches / Muted** - suppressed by default
@@ -70,7 +70,7 @@ Flagged is model-flexible by design:
 - **Mac, Linux, or Windows** with Python 3.9+
 - **A model endpoint** — LM Studio for local open-source models, or any OpenAI-compatible endpoint/proxy for frontier models
 - **Gmail account(s)** — up to as many as you want
-- **Telegram bot** — takes 2 minutes to create via [@BotFather](https://t.me/botfather)
+- **Telegram bot for v1 alerts** — takes 2 minutes to create via [@BotFather](https://t.me/botfather)
 - **Google Cloud project** (free) for Gmail API access
 
 ---
@@ -103,7 +103,9 @@ Full walkthrough → [SETUP.md](SETUP.md)
 
 ## OpenClaw
 
-Flagged can run beside a local OpenClaw setup today: Gmail is read through the Gmail API, classification happens through your configured model provider, and alerts go to Telegram where OpenClaw can help with follow-up actions you explicitly ask for.
+Flagged can run beside a local OpenClaw setup today: Gmail is read through the Gmail API, classification happens through your configured model provider, and v1 alerts go to Telegram where OpenClaw can help with follow-up actions you explicitly ask for.
+
+Telegram is the first delivery channel, not the product boundary. Slack, Discord, webhooks, and other alert targets are natural next integrations.
 
 It is not yet packaged as an OpenClaw plugin. See [docs/OPENCLAW.md](docs/OPENCLAW.md) for the current integration path and plugin roadmap.
 
@@ -150,7 +152,7 @@ The `alert_channels` section in `config.json` controls what happens after classi
 ```
 
 Supported modes:
-- `immediate` sends a Telegram alert now
+- `immediate` sends an alert now (Telegram in v1)
 - `digest` records/logs the item for later batching
 - `mute` suppresses the item
 
@@ -216,7 +218,7 @@ One `credentials.json` works for all accounts. Each account gets its own token f
 
 ---
 
-## Telegram Alert Format
+## V1 Telegram Alert Format
 
 ```
 🔴 URGENT — Important Email (Personal)
@@ -248,7 +250,7 @@ Pull requests welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Ideas for contributions:
 - **Outlook / Microsoft 365 support** — big one
-- **Slack / Discord notification support** (alongside Telegram)
+- **Slack / Discord / webhook notification support** (alongside Telegram v1)
 - **Web dashboard** for viewing scored email history
 - **Better importance presets** for founders, families, freelancers, and small teams
 - **Webhook support** for custom integrations

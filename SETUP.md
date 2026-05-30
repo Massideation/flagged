@@ -26,7 +26,9 @@ For frontier models, point `model_provider.url` at an OpenAI-compatible endpoint
 
 ---
 
-## Step 3 — Telegram Bot Token + Chat ID
+## Step 3 — V1 Telegram Bot Token + Chat ID
+
+Telegram is the first alert delivery channel. The core product is the important-email highlighter; Slack, Discord, webhooks, and other channels can be added later.
 
 You already have a bot. Get the two values you need:
 

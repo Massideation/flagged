@@ -26,7 +26,7 @@ v3  Act automatically on patterns you've pre-approved
 ### What it does
 - Watches all Gmail accounts every 5 minutes
 - Scores every unread email 1–10 using local LLM (no data leaves your machine)
-- Fires Telegram alert for important emails above your threshold
+- Fires an alert for important emails above your threshold; Telegram is the v1 delivery channel
 - Alert includes: sender, subject, score, reason, 400-char preview
 
 ### What you do after the alert
@@ -177,7 +177,7 @@ Everything you need is already in the current codebase:
 
 | Feature | What to add |
 |---|---|
-| Telegram button taps | Telegram Bot callback_query API |
+| Alert feedback buttons | Telegram Bot callback_query API in v1; Slack, Discord, and webhook targets later |
 | Send email responses | Gmail API (add send scope) |
 | Add to calendar | Google Calendar API |
 | Context enrichment | Model-provider tools or OpenClaw/web search integration |
