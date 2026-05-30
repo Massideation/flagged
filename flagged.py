@@ -603,7 +603,7 @@ def send_startup_message(config: dict):
                     f"✅ *Email Monitor running*\n"
                     f"Watching: {', '.join(accounts)}\n"
                     f"Threshold: {config.get('score_threshold', 7)}/10\n"
-                    f"Checking every {config.get('poll_interval_seconds', 300) // 60} min"
+                    f"Checking every {config.get('poll_interval_seconds', 21600) // 60} min"
                 ),
                 "parse_mode": "Markdown"
             },
@@ -618,7 +618,7 @@ def run():
     priorities = load_priorities()
     seen = load_seen()
     threshold = config.get("score_threshold", 7)
-    interval = config.get("poll_interval_seconds", 300)
+    interval = config.get("poll_interval_seconds", 21600)
     max_emails = config.get("max_emails_per_check", 20)
 
     if not priorities:

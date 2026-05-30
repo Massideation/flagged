@@ -24,7 +24,7 @@ v3  Act automatically on patterns you've pre-approved
 **Tagline:** *Open-source important-email highlighting.*
 
 ### What it does
-- Watches all Gmail accounts every 5 minutes
+- Watches Gmail on a configurable schedule; the default is every 6 hours to keep the signal calm
 - Scores every unread email 1–10 using local LLM (no data leaves your machine)
 - Fires an alert for important emails above your threshold; Telegram is the v1 delivery channel
 - Alert includes: sender, subject, score, reason, 400-char preview

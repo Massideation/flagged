@@ -367,7 +367,7 @@ def write_config(base_dir: Path, bot_token: str, chat_id: str,
     section("Writing Configuration")
     config = {
         "score_threshold": threshold,
-        "poll_interval_seconds": 300,
+        "poll_interval_seconds": 21600,
         "max_emails_per_check": 20,
         "alert_channels": {
             "opportunities": {

@@ -2,7 +2,7 @@
   "_comment": "Copy this file to config.json and fill in your values. config.json is gitignored and will never be committed.",
 
   "score_threshold": 7,
-  "poll_interval_seconds": 300,
+  "poll_interval_seconds": 21600,
   "max_emails_per_check": 20,
 
   "alert_channels": {
