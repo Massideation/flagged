@@ -41,8 +41,8 @@ def header():
     print(gold(bold("  ██║  ██║███████╗██║  ██║██║  ██║███████╗██████╔╝")))
     print(gold(bold("  ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ ")))
     print()
-    print(f"  {bold('Local AI Email Monitor')} — Setup Wizard")
-    print(f"  {dim('Your inbox. Filtered by what actually matters.')}")
+    print(f"  {bold('Important Email Highlighter')} — Setup Wizard")
+    print(f"  {dim('Use frontier or open-source models to surface what matters.')}")
     print()
 
 def section(title):
@@ -146,8 +146,8 @@ def install_dependencies(base_dir: Path):
     ok("Dependencies installed")
 
 def check_lm_studio():
-    section("LM Studio Check")
-    info("Flagged needs LM Studio running with its Local Server enabled.")
+    section("Local Model Check")
+    info("Flagged can use frontier or open-source models. The default setup uses LM Studio locally.")
     info("Download: https://lmstudio.ai  (free)")
     print()
 
@@ -316,7 +316,7 @@ def setup_accounts(base_dir: Path, creds_path: str):
 
 # ── Model Selection ───────────────────────────────────────────────────────────
 def setup_model():
-    section("AI Model Selection")
+    section("Model Selection")
     available = get_lm_studio_models()
 
     if available:
@@ -339,14 +339,14 @@ def setup_model():
         for name, note in recommendations:
             print(f"     {dim('·')} {bold(name)} — {dim(note)}")
         print()
-        model = ask("Enter your model name (must match exactly in LM Studio)", default="qwen2.5-3b-instruct")
+        model = ask("Enter your model name", default="qwen2.5-3b-instruct")
 
     return model
 
 # ── Score Threshold ───────────────────────────────────────────────────────────
 def setup_threshold():
     section("Alert Sensitivity")
-    info("Flagged routes each email into Opportunity Radar, digest, or mute.")
+    info("Flagged routes each email into Important Email, digest, or mute.")
     info("The threshold below is the default immediate-alert sensitivity.")
     print()
     info("  10 = Drop everything")
@@ -371,10 +371,10 @@ def write_config(base_dir: Path, bot_token: str, chat_id: str,
         "max_emails_per_check": 20,
         "alert_channels": {
             "opportunities": {
-                "label": "Opportunity Radar",
+                "label": "Important Email",
                 "mode": "immediate",
                 "min_score": threshold,
-                "description": "Actual people, customers, friends, partners, paid work, and direct asks worth deciding on."
+                "description": "Actual people, customers, friends, partners, school/family logistics, paid work, and direct asks you cannot afford to miss."
             },
             "money_admin": {
                 "label": "Money/Admin",
@@ -401,9 +401,10 @@ def write_config(base_dir: Path, bot_token: str, chat_id: str,
                 "description": "Low-value noise."
             }
         },
-        "lm_studio": {
+        "model_provider": {
             "url": "http://localhost:1234",
-            "model": model
+            "model": model,
+            "api_key_env": ""
         },
         "telegram": {
             "bot_token": bot_token,

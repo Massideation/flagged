@@ -1,10 +1,10 @@
 # Flagged
 
-**Open-source important-email highlighting. Local AI. Zero cloud. No Superhuman subscription.**
+**Open-source important-email highlighting. Use frontier or open-source models. No Superhuman subscription.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
-[![LM Studio](https://img.shields.io/badge/LM%20Studio-compatible-green.svg)](https://lmstudio.ai/)
+[![OpenAI Compatible](https://img.shields.io/badge/OpenAI-compatible-green.svg)](https://platform.openai.com/docs/api-reference/chat)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
@@ -16,7 +16,7 @@
 
 ## What It Does
 
-Flagged monitors your Gmail accounts every few minutes, classifies unread email using a **local AI model running on your own machine**, and highlights the messages that are actually worth your attention.
+Flagged monitors your Gmail accounts every few minutes, classifies unread email using a **frontier or open-source model you choose**, and highlights the messages that are actually worth your attention.
 
 - **Important Email Highlighter** - immediate Telegram alerts for real people, customers, friends, partners, paid work, school/family logistics, and direct asks worth deciding on
 - **Money/Admin** - digest by default for bills, receipts, refunds, affiliate payouts, and account notices
@@ -44,7 +44,7 @@ Most AI email products want to become your whole inbox. Flagged is intentionally
 
 | Feature | Flagged | Email rules/Zapier | SaaS AI inboxes |
 |---|---|---|---|
-| **Your data stays local** | ✅ | ❌ | ❌ |
+| **Frontier or open-source model choice** | ✅ | Limited | Limited |
 | **No subscription fee** | ✅ | ❌ | ❌ |
 | **Tunable importance rules** | ✅ | Limited | Limited |
 | **Works across multiple inboxes** | ✅ | Paid tier | Paid tier |
@@ -55,19 +55,20 @@ Most AI email products want to become your whole inbox. Flagged is intentionally
 
 ## Privacy Model
 
-Flagged is built local-first by design:
+Flagged is model-flexible by design:
 
-- **Your email body never leaves your machine.** Only the sender name, subject line, and a 400-character preview snippet are passed to the AI model — and that model runs locally.
-- **LM Studio runs entirely on your hardware.** GLM-4, Phi-3, Llama — whatever you choose, it never phones home.
+- **Local/open-source by default.** LM Studio lets Qwen, Phi, Llama, Gemma, and similar models run entirely on your hardware.
+- **Frontier-capable when you choose it.** Point Flagged at an OpenAI-compatible endpoint or proxy if you want a hosted frontier model.
+- **Minimal payload.** Flagged sends only sender name, subject line, attachment flag, and a 400-character preview snippet to the configured model provider. It never sends the full email body.
 - **Gmail OAuth is read-only.** Flagged cannot send, delete, or modify emails. It can only read.
-- **The only outbound connection is your Telegram bot firing alerts.** That's it.
+- **You control the tradeoff.** Use local models for maximum privacy, or frontier models when accuracy matters more than keeping classification fully local.
 
 ---
 
 ## Requirements
 
 - **Mac, Linux, or Windows** with Python 3.9+
-- **[LM Studio](https://lmstudio.ai/)** with a model loaded (see recommendations below)
+- **A model endpoint** — LM Studio for local open-source models, or any OpenAI-compatible endpoint/proxy for frontier models
 - **Gmail account(s)** — up to as many as you want
 - **Telegram bot** — takes 2 minutes to create via [@BotFather](https://t.me/botfather)
 - **Google Cloud project** (free) for Gmail API access
@@ -102,7 +103,7 @@ Full walkthrough → [SETUP.md](SETUP.md)
 
 ## OpenClaw
 
-Flagged can run beside a local OpenClaw setup today: Gmail is read through the Gmail API, classification happens locally through LM Studio, and alerts go to Telegram where OpenClaw can help with follow-up actions you explicitly ask for.
+Flagged can run beside a local OpenClaw setup today: Gmail is read through the Gmail API, classification happens through your configured model provider, and alerts go to Telegram where OpenClaw can help with follow-up actions you explicitly ask for.
 
 It is not yet packaged as an OpenClaw plugin. See [docs/OPENCLAW.md](docs/OPENCLAW.md) for the current integration path and plugin roadmap.
 
@@ -110,9 +111,11 @@ For the product direction and next engineering steps, see [docs/OPPORTUNITY_RADA
 
 ---
 
-## Model Recommendations
+## Model Options
 
-Flagged works with any OpenAI-compatible local model via LM Studio. For email classification, **smaller is better** — you want fast and accurate, not large and slow.
+Flagged works with OpenAI-compatible chat-completions endpoints. You can use local open-source models through LM Studio, or a frontier model through a compatible provider/proxy.
+
+For email classification, **smaller local models are often enough** — you want fast and accurate, not large and slow.
 
 | Model | RAM | Speed | Notes |
 |---|---|---|---|
@@ -123,7 +126,9 @@ Flagged works with any OpenAI-compatible local model via LM Studio. For email cl
 | **SmolLM3 3B** | ~2GB | ⚡⚡⚡ | Newest option, outperforms Llama 3.2 3B on benchmarks |
 | **GLM-4.7 / LFM** | ~5-8GB | ⚡ | Works, but overkill — wastes RAM you need for other work |
 
-**On a 16GB machine:** use Qwen2.5 3B. It uses ~2GB RAM, classifies emails in under a second, and leaves your machine free for everything else.
+**On a 16GB machine:** use Qwen2.5 3B locally. It uses ~2GB RAM, classifies emails in under a second, and leaves your machine free for everything else.
+
+**For frontier models:** configure `model_provider.url`, `model_provider.model`, and optionally `model_provider.api_key_env` in `config.json`. Remember that sender, subject, attachment flag, and the preview snippet will be sent to that provider.
 
 ---
 

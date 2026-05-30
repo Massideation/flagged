@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Flagged — Local AI Email Monitor
+Flagged — Important Email Highlighter
 ─────────────────────────────────────────────────────────
-Monitors 3 Gmail accounts, scores importance via LM Studio (local, private),
-fires Telegram alerts for emails scoring above your threshold.
+Monitors Gmail accounts, scores importance via an OpenAI-compatible model
+provider, and fires alerts for emails scoring above your threshold.
 
 Read-only. No auto-reply. Just surfaces what matters.
-Data stays on your Mac Mini — only Gmail OAuth touches the internet.
+Use local open-source models for maximum privacy, or configure a frontier model
+endpoint when you explicitly want that tradeoff.
 """
 
 import os
@@ -38,10 +39,10 @@ FEEDBACK_PATH = BASE_DIR / "feedback.json"
 
 DEFAULT_ALERT_CHANNELS = {
     "opportunities": {
-        "label": "Opportunity Radar",
+        "label": "Important Email",
         "mode": "immediate",
         "min_score": 7,
-        "description": "Actual people, customers, friends, partnerships, paid work, and asks worth deciding on."
+        "description": "Actual people, customers, friends, partnerships, school/family logistics, paid work, and asks you cannot afford to miss."
     },
     "money_admin": {
         "label": "Money/Admin",
@@ -274,22 +275,38 @@ def fetch_unread_emails(service, max_results=20):
 
     return emails
 
-# ── LM Studio Classifier ──────────────────────────────────────────────────────
+def get_model_provider(config: dict) -> dict:
+    """Return model provider config, preserving old lm_studio configs."""
+    provider = config.get("model_provider") or config.get("lm_studio") or {}
+    if "url" not in provider or "model" not in provider:
+        raise KeyError(
+            "model_provider.url and model_provider.model are required. "
+            "LM Studio configs using lm_studio still work for backwards compatibility."
+        )
+    return provider
+
+# ── Model Classifier ──────────────────────────────────────────────────────────
 def score_email(email: dict, priorities_context: str, config: dict) -> dict:
     """
-    Score email importance using your local LM Studio model.
+    Score email importance using a configured OpenAI-compatible model endpoint.
     Sends: sender, subject, 400-char preview, attachment flag.
     Never sends the full email body.
-    Everything stays on your Mac Mini.
+    Local model endpoints keep the payload on your machine; frontier endpoints
+    receive the metadata/snippet shown below.
     """
     import requests
 
-    lm_url = config["lm_studio"]["url"]
-    model = config["lm_studio"]["model"]
+    provider = get_model_provider(config)
+    model_url = provider["url"].rstrip("/")
+    model = provider["model"]
+    headers = {"Content-Type": "application/json"}
+    api_key_env = provider.get("api_key_env")
+    if api_key_env and os.getenv(api_key_env):
+        headers["Authorization"] = f"Bearer {os.getenv(api_key_env)}"
 
     alert_channels = json.dumps(config.get("alert_channels", default_alert_channels()), indent=2)
 
-    prompt = f"""You are Flagged, a local opportunity-radar classifier for a specific person.
+    prompt = f"""You are Flagged, an important-email classifier for a specific person.
 
 Your job is not to surface every important-looking email. Your job is to decide whether this email creates a choice or opportunity the person may want to see.
 
@@ -334,7 +351,8 @@ Return ONLY a raw JSON object. No explanation. No markdown. No backticks.
 
     try:
         response = requests.post(
-            f"{lm_url}/v1/chat/completions",
+            f"{model_url}/v1/chat/completions",
+            headers=headers,
             json={
                 "model": model,
                 "messages": [{"role": "user", "content": prompt}],
@@ -358,14 +376,14 @@ Return ONLY a raw JSON object. No explanation. No markdown. No backticks.
         return normalize_score_data(json.loads(raw), config)
 
     except requests.exceptions.ConnectionError:
-        log.error("Cannot reach LM Studio. Is the Local Server running?")
-        return normalize_score_data({"score": 5, "reason": "LM Studio unreachable", "category": "other"}, config)
+        log.error("Cannot reach model provider. Is the local server or configured endpoint running?")
+        return normalize_score_data({"score": 5, "reason": "Model provider unreachable", "category": "other"}, config)
     except Exception as e:
         log.warning(f"Scoring failed: {e}")
         return normalize_score_data({"score": 5, "reason": "Classification error", "category": "other"}, config)
 
 def normalize_score_data(score_data: dict, config: dict) -> dict:
-    """Backfill newer opportunity-radar fields when older models omit them."""
+    """Backfill newer routing fields when older models omit them."""
     channels = config.get("alert_channels", default_alert_channels())
     category = score_data.get("category", "other")
 

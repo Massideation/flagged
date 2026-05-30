@@ -1,6 +1,6 @@
 # Setup Guide
 
-Flagged is an open-source important-email highlighter. The setup goal is simple: connect Gmail read-only, run local AI through LM Studio, and get Telegram alerts only when an email is important enough to break through.
+Flagged is an open-source important-email highlighter. The setup goal is simple: connect Gmail read-only, choose a frontier or open-source model provider, and get alerts only when an email is important enough to break through.
 
 ## Step 1 — Dependencies
 
@@ -10,13 +10,19 @@ pip3 install -r requirements.txt
 
 ---
 
-## Step 2 — LM Studio
+## Step 2 — Choose A Model Provider
+
+Flagged uses an OpenAI-compatible chat-completions endpoint.
+
+For local open-source models, use LM Studio:
 
 1. Open LM Studio on your Mac Mini
 2. Click **Local Server** in the left sidebar
-3. Load your model (GLM-4.7 or Phi-3 Mini recommended)
+3. Load your model (Qwen2.5 3B or Phi-3 Mini recommended)
 4. Click **Start Server** — runs at `http://localhost:1234`
-5. Copy the exact model name string shown and paste it into `config.json` under `lm_studio.model`
+5. Copy the exact model name string shown and paste it into `config.json` under `model_provider.model`
+
+For frontier models, point `model_provider.url` at an OpenAI-compatible endpoint or proxy, set `model_provider.model`, and set `model_provider.api_key_env` to the environment variable containing the API key.
 
 ---
 
@@ -68,7 +74,7 @@ cp config.example.json config.json
 
 Edit `config.json`:
 - Set your Telegram `bot_token` and `chat_id`
-- Set `lm_studio.model` to match exact model name from LM Studio
+- Set `model_provider.model` to match your local or frontier model name
 - Update account `label` names to match your actual accounts
 - All three accounts share the same `credentials.json` — only the `token_path` differs per account
 
@@ -148,8 +154,8 @@ Changes apply on the next poll — no restart needed.
 | Problem | Fix |
 |---|---|
 | `config.json not found` | `cp config.example.json config.json` and fill in values |
-| LM Studio not responding | Open LM Studio → confirm Local Server is running and model is loaded |
+| Model provider not responding | For local mode, open LM Studio and confirm Local Server is running. For frontier mode, verify the endpoint and API key env var |
 | Gmail auth error | Delete `token_ACCOUNTNAME.pkl` and re-run to re-authorize |
-| Wrong model name | Check LM Studio Local Server tab → copy exact model string |
+| Wrong model name | Check LM Studio Local Server tab or your frontier provider docs and copy the exact model string |
 | Telegram not sending | Verify bot token and chat ID; make sure you've started the bot in Telegram |
 | High CPU on Mac Mini | Switch to Phi-3 Mini or Llama 3.2 3B — much faster for classification |

@@ -1,11 +1,11 @@
 # Flagged + OpenClaw
 
-Flagged is currently a standalone local important-email highlighter that can run on the same machine as OpenClaw.
+Flagged is currently a standalone important-email highlighter that can run on the same machine as OpenClaw.
 
 ## What Works Now
 
 - Gmail is read through the Gmail API with read-only OAuth scopes.
-- Email metadata and snippets are classified locally through LM Studio.
+- Email metadata and snippets are classified through the configured model provider: local open-source models by default, or a frontier model endpoint if the user chooses that tradeoff.
 - Telegram alerts can be delivered to the same chat or channel OpenClaw monitors.
 - OpenClaw can then help with follow-up tasks when the user asks, such as pulling a link from an email, summarizing the thread, drafting a reply, or adding a follow-up reminder.
 
@@ -22,7 +22,7 @@ pip install -r requirements.txt
 python setup_wizard.py
 \`\`\`
 
-The setup wizard configures Gmail, Telegram, LM Studio, and the background service.
+The setup wizard configures Gmail, alerts, the model provider, and the background service.
 
 ## OpenClaw Plugin Roadmap
 

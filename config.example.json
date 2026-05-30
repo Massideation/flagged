@@ -38,10 +38,11 @@
     }
   },
 
-  "lm_studio": {
+  "model_provider": {
     "url": "http://localhost:1234",
     "model": "qwen2.5-3b-instruct",
-    "_model_note": "Check LM Studio > Local Server tab for the exact model name string. Recommended: qwen2.5-3b-instruct (best for classification, ~2GB RAM). Alternatives: qwen3-4b-instruct, phi-3.5-mini, llama-3.2-3b-instruct, smollm3-3b"
+    "api_key_env": "",
+    "_provider_note": "Any OpenAI-compatible /v1/chat/completions endpoint. Default is LM Studio for local open-source models. For frontier models, point url/model at your provider or proxy and set api_key_env to the environment variable containing the API key."
   },
 
   "telegram": {

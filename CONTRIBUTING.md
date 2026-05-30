@@ -22,7 +22,7 @@ Thanks for wanting to contribute. Flagged is intentionally simple: it highlights
 - Improve SETUP.md clarity for any platform
 - Add a `--dry-run` flag that scores emails without sending alerts
 - Add a `--test` flag that sends a test Telegram message
-- Better error messages when LM Studio isn't running
+- Better error messages when the configured model provider is not reachable
 - Add example `PRIORITIES.md` profiles for common use cases
 
 ---
@@ -49,7 +49,7 @@ Thanks for wanting to contribute. Flagged is intentionally simple: it highlights
 
 ## Privacy Principle
 
-Flagged's core promise is local-first important-email highlighting. Any contribution that requires sending email body content to a remote API should be opt-in and clearly documented.
+Flagged's core promise is model-flexible important-email highlighting. Local/open-source models should stay first-class, and any remote frontier-model path should be explicit and clearly documented.
 
 ---
 
@@ -57,7 +57,7 @@ Flagged's core promise is local-first important-email highlighting. Any contribu
 
 Open an issue with:
 - Your OS and Python version
-- Your LM Studio model
+- Your configured model provider and model
 - The full error message from the log
 - What you expected to happen
 

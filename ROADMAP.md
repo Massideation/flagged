@@ -4,6 +4,7 @@
 **Domain:** flagged.email  
 **Repo:** github.com/Massideation/flagged  
 **Core principle:** Start with the one job people actually pay for: show them the emails they cannot afford to miss. Test first, earn trust, then automate.
+**Model principle:** Let users choose the intelligence layer: local open-source models for privacy and cost control, frontier models when they want maximum classification quality.
 
 ---
 
@@ -179,11 +180,11 @@ Everything you need is already in the current codebase:
 | Telegram button taps | Telegram Bot callback_query API |
 | Send email responses | Gmail API (add send scope) |
 | Add to calendar | Google Calendar API |
-| Context enrichment | Web search tool in LM Studio |
+| Context enrichment | Model-provider tools or OpenClaw/web search integration |
 | Template matching | Simple JSON template library |
 | Follow-up tracking | Add follow_ups.json alongside seen_emails.json |
 
-GLM-4.7 already supports tool-use / function calling — the model can handle all of this without upgrading.
+Many frontier and open-source models support tool-use / function calling — the model layer should stay swappable instead of locking Flagged to one provider.
 
 ---
 

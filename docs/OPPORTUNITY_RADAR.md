@@ -4,7 +4,9 @@ Flagged's core product promise:
 
 > Highlight the important emails I would otherwise miss, without making me pay for a premium email client or sort through newsletters, bills, receipts, and sales pitches.
 
-Flagged is not trying to become a full email client. It is a local-first important-email highlighter that works with the inbox you already use.
+Flagged is not trying to become a full email client. It is a model-flexible important-email highlighter that works with the inbox you already use.
+
+The model layer should stay flexible: local open-source models for private, cheap classification by default; frontier models when a user chooses higher accuracy and accepts sending the minimal email metadata/snippet to that provider.
 
 ## What Should Alert Immediately
 
