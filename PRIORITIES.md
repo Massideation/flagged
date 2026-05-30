@@ -19,6 +19,7 @@ Edit this section to describe who you are and what you're working on.
 - Direct outreach from known crypto projects: Arbitrum, Base, Solana, Ethereum Foundation, a16z, Multicoin, Paradigm, Coinbase Ventures
 - Term sheets, LOIs, partnership proposals with actual numbers
 - Skool emails only when they clearly involve revenue, paid clients, partnership opportunities, refunds/payment issues, or a concrete way to make money
+- Dribbble emails only when they clearly involve paid design/client work, hiring, partnerships, licensing, sales, or a concrete opportunity to make money
 - Press and media interview requests (crypto, AI, finance media)
 - Time-sensitive opportunities with a hard deadline in the subject or preview
 - Emails addressed to me personally (not a mailing list)
@@ -54,6 +55,7 @@ Edit this section to describe who you are and what you're working on.
 - Affiliate payouts unless unusually large or requiring action
 - Anyone selling me software, services, lead generation, ads, courses, or agencies
 - Skool community notifications, course updates, comments, posts, member activity, or general engagement emails unless they clearly connect to making money
+- Dribbble likes, follows, digests, design inspiration, community updates, promos, or generic notifications unless they clearly connect to paid work or a real opportunity
 
 ## Known High-Priority Senders (always raise to at least 8)
 # Add names/domains here as you build relationships
