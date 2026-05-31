@@ -226,6 +226,7 @@ One `credentials.json` works for all accounts. Each account gets its own token f
 🤝 PARTNERSHIP
 From: founder@coolproject.xyz
 Subject: Collab idea — would love to chat
+Gist: A founder appears to be asking for a specific collaboration conversation. This may be an opportunity because it is direct personal outreach with a concrete next step.
 Score: 8/10 — Direct personal outreach, specific ask, no template language
 Sender: person / prospect
 Ask: needs_reply
@@ -234,8 +235,11 @@ Noise check: Not a newsletter, bill, receipt, or sales pitch; no list/unsubscrib
 
 "Hey, I've been following your work and wanted to..."
 
-[Good alert] [Mute type] [Digest only]
+[Good] [Bad]
+[Mute type] [Digest only]
 ```
+
+After you tap a feedback button, Flagged asks for an optional short reason. Those examples are saved locally and included in future classification prompts so the system learns what you consider a real opportunity, a bad alert, or digest-only noise.
 
 Emoji legend:
 - 🔴 `9-10` Urgent

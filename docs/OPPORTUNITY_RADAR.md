@@ -19,7 +19,7 @@ Immediate alerts should be reserved for email that looks like:
 - A school/family email that is specific to the user's child, schedule, event, form, deadline, or action required.
 - A time-sensitive opportunity where missing it would matter.
 
-The alert should explain why it matters and what kind of choice it creates.
+The alert should explain why it matters and what kind of choice it creates. It should also include a short plain-English gist so the user can quickly tell whether it is a real opportunity without opening Gmail.
 
 ## What Should Not Alert Immediately
 
@@ -91,7 +91,7 @@ Telegram buttons should not just record feedback. They should update a local lea
 - digest_examples: useful but not immediate
 - sender_rules: always alert / always digest / always mute
 
-That file should be injected into the classifier prompt on every run.
+That file should be injected into the classifier prompt on every run. After a button tap, the Telegram bot should ask for an optional short reason so the user can teach the system why the alert was good, bad, or digest-only.
 
 ### Alert Scope Management
 

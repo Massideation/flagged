@@ -177,11 +177,63 @@ def load_feedback():
     if FEEDBACK_PATH.exists():
         with open(FEEDBACK_PATH) as f:
             return json.load(f)
-    return {"telegram_update_offset": None, "items": []}
+    return {
+        "telegram_update_offset": None,
+        "items": [],
+        "positive_examples": [],
+        "negative_examples": [],
+        "digest_examples": [],
+        "pending_reasons": {},
+    }
 
 def save_feedback(feedback: dict):
     with open(FEEDBACK_PATH, "w") as f:
         json.dump(feedback, f, indent=2)
+
+def compact_email_for_feedback(alert: dict) -> dict:
+    score_data = alert.get("score_data", {})
+    return {
+        "from": alert.get("from"),
+        "subject": alert.get("subject"),
+        "gist": score_data.get("gist"),
+        "category": score_data.get("category"),
+        "sender_type": score_data.get("sender_type"),
+        "relationship": score_data.get("relationship"),
+        "ask_type": score_data.get("ask_type"),
+        "score": score_data.get("score"),
+        "reason": score_data.get("reason"),
+        "why_flagged": score_data.get("why_flagged"),
+        "why_not_noise": score_data.get("why_not_noise"),
+    }
+
+def append_limited(items: list, item: dict, limit: int = 50):
+    items.append(item)
+    del items[:-limit]
+
+def build_feedback_context(feedback: dict, limit: int = 6) -> str:
+    """Summarize recent feedback so future classifications can improve."""
+    sections = [
+        ("Good alerts to keep surfacing", feedback.get("positive_examples", [])),
+        ("Bad alerts to avoid/mute", feedback.get("negative_examples", [])),
+        ("Alerts that should be digest-only", feedback.get("digest_examples", [])),
+    ]
+    lines = []
+    for title, examples in sections:
+        recent = examples[-limit:]
+        if not recent:
+            continue
+        lines.append(f"{title}:")
+        for ex in recent:
+            email = ex.get("email", {})
+            reason = ex.get("user_reason") or "No reason supplied."
+            lines.append(
+                "- "
+                f"From: {email.get('from')}; "
+                f"Subject: {email.get('subject')}; "
+                f"Gist: {email.get('gist') or email.get('reason')}; "
+                f"User said: {reason}"
+            )
+    return "\n".join(lines) if lines else "No user feedback yet."
 
 def remember_alert(email: dict, score_data: dict, account_label: str) -> str:
     """Store a compact local record so Telegram feedback buttons have an id."""
@@ -194,6 +246,7 @@ def remember_alert(email: dict, score_data: dict, account_label: str) -> str:
         "email_id": email["id"],
         "from": email["from"],
         "subject": email["subject"],
+        "snippet": email.get("snippet", ""),
         "score_data": score_data,
         "created_at": int(time.time())
     }
@@ -305,6 +358,7 @@ def score_email(email: dict, priorities_context: str, config: dict) -> dict:
         headers["Authorization"] = f"Bearer {os.getenv(api_key_env)}"
 
     alert_channels = json.dumps(config.get("alert_channels", default_alert_channels()), indent=2)
+    feedback_context = build_feedback_context(load_feedback())
 
     prompt = f"""You are Flagged, an important-email classifier for a specific person.
 
@@ -322,6 +376,9 @@ Here is their priority context:
 Alert channel settings:
 {alert_channels}
 
+Recent user feedback:
+{feedback_context}
+
 ─────────────────────────────
 Classify this incoming email:
 
@@ -338,6 +395,7 @@ Return ONLY a raw JSON object. No explanation. No markdown. No backticks.
 {{
   "score": <integer 1-10>,
   "reason": "<one concise sentence>",
+  "gist": "<1-2 plain-English sentences explaining what the email appears to be about and why it may or may not be an opportunity>",
   "category": "<one of: customer|friend|opportunity|partnership|media|speaking|meeting|money_admin|affiliate|learning_event|newsletter|sales_pitch|notification|other>",
   "sender_type": "<one of: person|company|automated|newsletter|sales>",
   "relationship": "<one of: knows_me|customer|friend|prospect|partner|vendor|platform|unknown>",
@@ -357,7 +415,7 @@ Return ONLY a raw JSON object. No explanation. No markdown. No backticks.
                 "model": model,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.1,
-                "max_tokens": 150
+                "max_tokens": 220
             },
             timeout=45
         )
@@ -415,6 +473,7 @@ def normalize_score_data(score_data: dict, config: dict) -> dict:
     score_data["alert_channel"] = channel
     score_data["alert_mode"] = score_data.get("alert_mode") or channel_config.get("mode", "mute")
     score_data["confidence"] = int(score_data.get("confidence", 5))
+    score_data["gist"] = score_data.get("gist") or score_data.get("why_flagged") or score_data.get("reason", "")
     score_data["why_flagged"] = score_data.get("why_flagged") or score_data.get("reason", "")
     score_data["why_not_noise"] = score_data.get("why_not_noise") or "No separate noise check provided."
     return score_data
@@ -440,7 +499,7 @@ def alert_decision(score_data: dict, config: dict) -> dict:
     }
 
 def process_telegram_feedback(config: dict):
-    """Collect Telegram button feedback into feedback.json for tuning."""
+    """Collect Telegram button feedback and optional reasons into feedback.json."""
     import requests
 
     telegram_config = config.get("telegram", {})
@@ -470,6 +529,49 @@ def process_telegram_feedback(config: dict):
 
     for update in updates:
         feedback["telegram_update_offset"] = update["update_id"] + 1
+        message = update.get("message")
+        if message and message.get("text"):
+            chat_id = str(message.get("chat", {}).get("id", ""))
+            pending = feedback.setdefault("pending_reasons", {}).get(chat_id)
+            if pending:
+                prompt_message_id = pending.get("prompt_message_id")
+                reply_to_message_id = (message.get("reply_to_message") or {}).get("message_id")
+                if not prompt_message_id or reply_to_message_id != prompt_message_id:
+                    changed = True
+                    continue
+                feedback.setdefault("pending_reasons", {}).pop(chat_id, None)
+                user_reason = message["text"].strip()
+                for item in reversed(feedback.get("items", [])):
+                    if item.get("alert_id") == pending.get("alert_id") and item.get("action") == pending.get("action"):
+                        item["user_reason"] = user_reason
+                        break
+                bucket = {
+                    "good": "positive_examples",
+                    "bad": "negative_examples",
+                    "mute": "negative_examples",
+                    "digest": "digest_examples",
+                }.get(pending.get("action"))
+                if bucket:
+                    alert = history.get(pending.get("alert_id"), {})
+                    examples = feedback.setdefault(bucket, [])
+                    for example in reversed(examples):
+                        if example.get("alert_id") == pending.get("alert_id"):
+                            example["user_reason"] = user_reason
+                            break
+                    else:
+                        append_limited(
+                            examples,
+                            {
+                                "created_at": int(time.time()),
+                                "alert_id": pending.get("alert_id"),
+                                "user_reason": user_reason,
+                                "email": compact_email_for_feedback(alert),
+                            },
+                        )
+                changed = True
+                log.info(f"Feedback reason saved: {pending.get('action')} for {pending.get('alert_id')}")
+                continue
+
         callback = update.get("callback_query")
         if not callback:
             changed = True
@@ -480,9 +582,13 @@ def process_telegram_feedback(config: dict):
             changed = True
             continue
 
-        _, action, alert_id = data.split(":", 2)
+        parts = data.split(":", 2)
+        if len(parts) != 3:
+            changed = True
+            continue
+        _, action, alert_id = parts
         alert = history.get(alert_id, {})
-        feedback.setdefault("items", []).append({
+        feedback_item = {
             "created_at": int(time.time()),
             "action": action,
             "alert_id": alert_id,
@@ -490,20 +596,72 @@ def process_telegram_feedback(config: dict):
             "from": alert.get("from"),
             "subject": alert.get("subject"),
             "score_data": alert.get("score_data", {}),
-        })
+        }
+        feedback.setdefault("items", []).append(feedback_item)
+
+        bucket = {
+            "good": "positive_examples",
+            "bad": "negative_examples",
+            "mute": "negative_examples",
+            "digest": "digest_examples",
+        }.get(action)
+        if bucket:
+            append_limited(
+                feedback.setdefault(bucket, []),
+                {
+                    "created_at": int(time.time()),
+                    "alert_id": alert_id,
+                    "user_reason": "",
+                    "email": compact_email_for_feedback(alert),
+                },
+            )
 
         try:
             requests.post(
                 f"https://api.telegram.org/bot{bot_token}/answerCallbackQuery",
                 json={
                     "callback_query_id": callback["id"],
-                    "text": "Feedback saved",
+                    "text": "Feedback saved. Reply with why if you want.",
                     "show_alert": False,
                 },
                 timeout=5,
             )
         except Exception:
             pass
+
+        message_obj = callback.get("message") or {}
+        chat_id = str(message_obj.get("chat", {}).get("id", ""))
+        if chat_id:
+            feedback.setdefault("pending_reasons", {})[chat_id] = {
+                "action": action,
+                "alert_id": alert_id,
+                "created_at": int(time.time()),
+            }
+            label = {
+                "good": "What made this a good alert?",
+                "bad": "Why was this a bad alert?",
+                "mute": "Why should this type be muted?",
+                "digest": "Why should this be digest-only?",
+            }.get(action, "Why did you choose that?")
+            try:
+                prompt_response = requests.post(
+                    f"https://api.telegram.org/bot{bot_token}/sendMessage",
+                    json={
+                        "chat_id": chat_id,
+                        "text": f"{label}\nReply here with a short reason, or ignore this.",
+                        "reply_markup": {"force_reply": True, "selective": True},
+                    },
+                    timeout=5,
+                )
+                prompt_response.raise_for_status()
+                result = prompt_response.json().get("result", {})
+                prompt_message_id = result.get("message_id")
+                if prompt_message_id:
+                    feedback["pending_reasons"][chat_id]["prompt_message_id"] = prompt_message_id
+                else:
+                    feedback["pending_reasons"].pop(chat_id, None)
+            except Exception:
+                feedback["pending_reasons"].pop(chat_id, None)
 
         changed = True
         log.info(f"Feedback saved: {action} for {alert_id}")
@@ -539,6 +697,7 @@ def send_telegram(email: dict, score_data: dict, account_label: str, config: dic
     alert_id = remember_alert(email, score_data, account_label)
     score = score_data["score"]
     reason = score_data["reason"]
+    gist = score_data.get("gist") or reason
     category = score_data.get("category", "other")
     cat_emoji = CATEGORY_EMOJI.get(category, "📧")
 
@@ -557,6 +716,7 @@ def send_telegram(email: dict, score_data: dict, account_label: str, config: dic
         f"{cat_emoji} {category.upper()}{attachment_note}\n"
         f"From: {email['from']}\n"
         f"Subject: {email['subject']}\n"
+        f"Gist: {gist}\n"
         f"Score: {score}/10 — {reason}\n"
         f"Sender: {score_data.get('sender_type')} / {score_data.get('relationship')}\n"
         f"Ask: {score_data.get('ask_type')}\n"
@@ -572,11 +732,16 @@ def send_telegram(email: dict, score_data: dict, account_label: str, config: dic
         }
         if config.get("telegram", {}).get("feedback_buttons", True) is not False:
             payload["reply_markup"] = {
-                "inline_keyboard": [[
-                    {"text": "Good alert", "callback_data": f"fb:good:{alert_id}"},
-                    {"text": "Mute type", "callback_data": f"fb:mute:{alert_id}"},
-                    {"text": "Digest only", "callback_data": f"fb:digest:{alert_id}"}
-                ]]
+                "inline_keyboard": [
+                    [
+                        {"text": "Good", "callback_data": f"fb:good:{alert_id}"},
+                        {"text": "Bad", "callback_data": f"fb:bad:{alert_id}"},
+                    ],
+                    [
+                        {"text": "Mute type", "callback_data": f"fb:mute:{alert_id}"},
+                        {"text": "Digest only", "callback_data": f"fb:digest:{alert_id}"}
+                    ]
+                ]
             }
 
         r = requests.post(
