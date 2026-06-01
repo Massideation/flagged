@@ -31,6 +31,7 @@ Edit this section to describe who you are and what you're working on.
 - Better Bronx emails about startups, founder/community events, startup meetups, applications, or inquiries
 - Startup-related inquiries that could connect to Stack, crypto, finance, fintech, founders, or business development
 - Mass Ideation AI consulting opportunities: AI automation, AI agents, chatbots, CRM/GoHighLevel, lead follow-up, intake, sales automation, workflow automation, or implementation projects
+- Calendar invites and meeting invitations tied to Stack, Mass Ideation, client work, startup/founder events, blockchain, finance, fintech, Better Bronx, or AI consulting opportunities
 - Podcast or newsletter feature requests
 - Follow-ups from people I've previously connected with
 - Beta access or early access invites to products in my space
@@ -51,7 +52,7 @@ Edit this section to describe who you are and what you're working on.
 - Mass marketing emails and promotions
 - Automated platform notifications (GitHub, Notion, etc.)
 - Newsletter subscriptions I haven't personally engaged with
-- Event blasts, RSVP promos, and webinar invites that were sent to a list, unless they match the specific Stack watchlist: blockchain, finance, fintech, Better Bronx, startup/founder meetups, or startup inquiries
+- Event blasts, RSVP promos, and webinar invites that were sent to a list, unless they match the specific Stack watchlist: blockchain, finance, fintech, Better Bronx, startup/founder meetups, startup inquiries, or relevant calendar invites
 - Generic AI newsletters, AI product updates, prompt/course emails, and AI webinars unless they include a concrete Mass Ideation consulting, implementation, or client opportunity
 - Cold sales outreach with templated language
 - Crypto airdrops, token promotions, presale announcements
